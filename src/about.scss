@@ -1,0 +1,10 @@
+.about {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  p {
+    padding: 0.25em;
+    margin: 0;
+  }
+}
