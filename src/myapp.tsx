@@ -3,6 +3,7 @@ import { lazy } from 'solid-js'
 
 const About = lazy(() => import('./about'))
 const MainPage = lazy(() => import('./home'))
+const Vs = lazy(() => import('./vs'))
 
 export const MyApp = () => {
 
@@ -21,6 +22,7 @@ export const MyApp = () => {
           <Routes>
             <Route path="/" component={MainPage}/>
             <Route path="/about" component={About}/>
+            <Route path="/vs/:id" component={Vs}/>
           </Routes>
         </div>
       </Router>
