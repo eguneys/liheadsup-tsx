@@ -1,0 +1,129 @@
+@import '_variables.scss';
+
+.vs {
+  display: flex;
+
+
+  .side {
+    flex:1;
+    display: flex;
+    flex-flow: column;
+  }
+
+
+  .board {
+    flex: 3;
+  }
+}
+
+.board {
+  border-radius: 4px;
+  aspect-ratio: 16/9;
+  margin: 1em;
+  border: 2px solid $gray;
+}
+
+.info {
+  padding: 0.6em;
+  border: 1px solid $light;
+  border-radius: 1px;
+  div {
+    color: $light;
+    font-size: 0.96em;
+  }
+}
+
+
+.replay {
+
+  .action-bar {
+    padding: 0.2em;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    
+    .title {
+      color: $gray;
+    }
+
+    span.chips {
+      color: $orange;
+    }
+
+  }
+
+  .status-bar {
+    padding: 0.2em;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    span.chips {
+      color: $orange;
+    }
+  }
+
+  .move-list {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+ 
+    .title {
+      color: $gray;
+    }
+
+
+    ul {
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+
+      list-style: none;
+      background: $gray;
+      color: $dark;
+
+      li {
+        padding: 0.4em;
+
+        &:hover {
+          background: $orange;
+          color: $light;
+
+          span.chips {
+            color: $light;
+          }
+        }
+      }
+    }
+
+    span.chips {
+      color: $orange;
+    }
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+
+    background: $dark;
+    border: 1px solid $gray;
+    padding: 0.4em;
+  }
+}
+
+
+.timebar {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  background: $blue;
+  border-radius: 2px;
+
+  .bar {
+    border-radius: 2px;
+    height: 100%;
+    background: $lightblue;
+  }
+}

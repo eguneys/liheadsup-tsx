@@ -7,3 +7,47 @@
     }
   }
 }
+
+.lobby {
+  display: flex;
+
+  .side {
+    flex: 1;
+  }
+
+  .app {
+    flex: 3;
+  }
+}
+
+.side {
+  .footer {
+    margin-top: 1em;
+  }
+}
+
+.lobby-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  background: $lightblue;
+
+  li {
+    user-select: none;
+    cursor: pointer;
+    padding: 0.5em;
+
+    &:nth-child(even) {
+      background: $lightblue2;
+    }
+
+    &:hover {
+      background: $orange;
+    }
+
+
+  }
+}
+
+

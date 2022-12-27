@@ -1,8 +1,10 @@
 import "./about.scss"
+import { Title } from '@solidjs/meta'
 
 const About = () => {
 
   return (<>
+   <Title> liheadsup.com - About </Title>
    <div class="about">
      <h2> About </h2>
      <p> liheadsup.com is a website to play competitive Texas Holdem Poker as a game on the browser.</p>

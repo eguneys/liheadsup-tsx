@@ -2,6 +2,7 @@ import { createSignal, createEffect, on } from 'solid-js'
 import { useNavigate, Router, Routes, Route, A} from '@solidjs/router'
 import { lazy } from 'solid-js'
 import { Socket, generic_handlers } from './socket'
+import { MetaProvider } from '@solidjs/meta'
 
 const About = lazy(() => import('./about'))
 const MainPage = lazy(() => import('./home'))
@@ -12,7 +13,9 @@ type Redirect = { redirect: string }
 export const MyApp = () => {
   return (<>
       <Router>
-        <AppInRouter/>
+        <MetaProvider>
+          <AppInRouter/>
+        </MetaProvider>
       </Router>
       </>)
 }
@@ -58,11 +61,13 @@ const AppInRouter = () => {
             </div>
     
           </div>
-          <Routes>
-            <Route path="/" component={MainPage}/>
-            <Route path="/about" component={About}/>
-            <Route path="/vs/:id" component={Vs}/>
-          </Routes>
+          <div class='main'>
+            <Routes>
+              <Route path="/" component={MainPage}/>
+              <Route path="/about" component={About}/>
+              <Route path="/vs/:id" component={Vs}/>
+            </Routes>
+          </div>
         </div>
       </>)
 

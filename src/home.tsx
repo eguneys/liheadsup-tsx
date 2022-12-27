@@ -2,6 +2,7 @@ import './lobby.scss'
 import { For, onCleanup, createSignal, createMemo } from 'solid-js'
 import { A } from '@solidjs/router'
 import { Socket } from './socket'
+import { Title } from '@solidjs/meta'
 
 export type Hook = { by: string }
 
@@ -59,6 +60,7 @@ const MainPage = () => {
   }
 
   return (<>
+        <Title> liheadsup.com - Free Texas Hold'em Poker Online </Title>
         <div class="lobby">
           <div class="side">
             <div> <span>{nbGames()}</span> games played </div>
