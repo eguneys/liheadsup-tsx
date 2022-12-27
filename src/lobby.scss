@@ -1,0 +1,9 @@
+@import '_variables';
+
+.app {
+  .lobby-list {
+    li.orange {
+      background: $orange;
+    }
+  }
+}

@@ -1,7 +1,16 @@
 
+export function generic_handlers(handlers: Handlers) {
+  Socket.generic_handlers = handlers
+}
+
 export type Handlers = { [_: string]: (_: any) => void }
 
 export class Socket {
+
+  static me?: string
+
+  static generic_handlers?: Handlers
+
   static make = (route: string, handlers: Handlers) => {
     let res = new Socket()
     res.listen(route, handlers)
@@ -10,7 +19,9 @@ export class Socket {
 
   _onClose(event: CloseEvent) {
     this.socket = undefined
-    this.scheduleReconnect()
+    if (!this.disposed) {
+      this.scheduleReconnect()
+    }
   }
   _onOpen(event: Event) {
     this.ping()
@@ -18,7 +29,9 @@ export class Socket {
 
   _onError(event: Event) {
     this.socket = undefined
-    this.scheduleReconnect()
+    if (!this.disposed) {
+      this.scheduleReconnect()
+    }
   }
 
   _onMessage(event: MessageEvent) {
@@ -27,7 +40,11 @@ export class Socket {
     if (this.handlers[t]) {
       this.handlers[t](d)
     } else {
-      console.warn('Unhandled message', t, d)
+      if (Socket.generic_handlers?.[t]) {
+        Socket.generic_handlers[t](d);
+      } else {
+        console.warn('Unhandled message', t, d)
+      }
     }
   }
 
@@ -59,6 +76,15 @@ export class Socket {
 
   handlers!: Handlers
 
+  disposed: boolean = false
+
+  destroy() {
+    this.disposed = true
+    clearTimeout(this.reconnectId)
+    clearTimeout(this.pingId)
+    this.socket?.close()
+  }
+
   listen(route: string, handlers: Handlers) {
     this.handlers = handlers
     this.route = route
@@ -75,6 +101,11 @@ export class Socket {
   }
 
   reconnectNow() {
+
+    if (this.socket) {
+      this.socket.close()
+    }
+
     let base = 'ws://localhost:3456'
     let socket = new WebSocket(`${base}/${this.route}`)
 

@@ -1,11 +1,20 @@
-import { createSignal } from 'solid-js'
+import './lobby.scss'
+import { For, onCleanup, createSignal, createMemo } from 'solid-js'
 import { A } from '@solidjs/router'
 import { Socket } from './socket'
 
+export type Hook = { by: string }
+
 const MainPage = () => {
 
+  let [hooks, setHooks] = createSignal<Array<Hook>>([])
   let [nbGames, setNbGames] = createSignal(0)
   let [nbUsers, setNbUsers] = createSignal(0)
+
+
+  const mine = createMemo(() => hooks().filter(_ => _.by === Socket.me))
+  const others = createMemo(() => hooks().filter(_ => _.by !== Socket.me))
+
 
   let socket = Socket.make('lobby', {
     nb_users(nb_users: number) {
@@ -13,8 +22,41 @@ const MainPage = () => {
     },
     nb_games(nb_games: number) {
       setNbGames(nb_games)
+    },
+    hlist(list: Array<Hook>) {
+      setHooks(list)
+    },
+    hadd(hook: Hook) {
+      setHooks(_ => {
+          _ = _.filter(_ => _.by !== hook.by)
+          _.push(hook)
+          return _
+          })
+    },
+    hrem(by: string) {
+      setHooks(_ => _.filter(_ => _.by !== by))
     }
   })
+
+  onCleanup(() => {
+    socket.destroy()
+    })
+
+  const addHook = () => {
+    if (mine().length > 0) {
+      socket.send('hrem')
+    } else {
+      socket.send('hadd')
+    }
+  }
+
+  const removeHook = () => {
+    socket.send('hrem')
+  }
+
+  const joinHook =  (hook: Hook) => {
+    socket.send('hjoin', hook)
+  }
 
   return (<>
         <div class="lobby">
@@ -28,14 +70,16 @@ const MainPage = () => {
           </div>
           <div class="app">
             <h2>Headsup Texas Hold'em Poker</h2>
-            <button class='primary'> New Headsup Match </button>
+            <button class='primary' onClick={() => addHook()}> New Headsup Match </button>
             <div> or join from lobby below </div>
             <h3> Lobby </h3>
             <ul class='lobby-list'>
-             <li> Headsup vs username1 </li>
-             <li> Headsup vs username2 </li>
-             <li> Headsup vs username3 </li>
-             <li> Headsup vs username4 </li>
+              <For each={mine()}>{ hook =>
+                 <li onClick={() => removeHook()} class='orange'> Headsup vs {hook.by} </li>
+              }</For>
+              <For each={others()}>{ hook =>
+                <li onClick={() => joinHook(hook)}> Headsup vs {hook.by} </li>
+              }</For>
             </ul>
           </div>
         </div>
