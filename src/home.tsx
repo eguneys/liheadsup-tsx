@@ -1,11 +1,26 @@
+import { createSignal } from 'solid-js'
 import { A } from '@solidjs/router'
+import { Socket } from './socket'
 
 const MainPage = () => {
+
+  let [nbGames, setNbGames] = createSignal(0)
+  let [nbUsers, setNbUsers] = createSignal(0)
+
+  let socket = Socket.make('lobby', {
+    nb_users(nb_users: number) {
+      setNbUsers(nb_users)
+    },
+    nb_games(nb_games: number) {
+      setNbGames(nb_games)
+    }
+  })
+
   return (<>
         <div class="lobby">
           <div class="side">
-            <div> <span> 10 </span> games played </div>
-            <div> <span> 30 </span> users online </div>
+            <div> <span>{nbGames()}</span> games played </div>
+            <div> <span>{nbUsers()}</span> users online </div>
             <div class='footer'>
               <A href='/about'>About</A>
             </div>
